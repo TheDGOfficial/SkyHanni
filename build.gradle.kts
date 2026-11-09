@@ -7,9 +7,9 @@ import net.fabricmc.loom.api.fabricapi.FabricApiExtension
 import net.fabricmc.loom.task.RemapSourcesJarTask
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
 import net.fabricmc.loom.task.prod.ClientProductionRunTask
-import org.gradle.api.Action
 import org.gradle.api.provider.Provider
 import org.gradle.api.artifacts.ExternalModuleDependency
+import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.process.ExecSpec
@@ -243,9 +243,9 @@ fun DependencyHandler.includeImplementation(dep: String, dependencyConfiguration
     return add("implementation", dep, dependencyConfiguration)
 }
 
-fun <T : Any> DependencyHandler.includeImplementation(dep: Provider<T>, dependencyConfiguration: ExternalModuleDependency.() -> Unit) {
-    addProvider("include", dep) { dependencyConfiguration() }
-    addProvider("implementation", dep) { dependencyConfiguration() }
+fun DependencyHandler.includeImplementation(dep: Provider<MinimalExternalModuleDependency>, dependencyConfiguration: ExternalModuleDependency.() -> Unit) {
+    addProvider<MinimalExternalModuleDependency, ExternalModuleDependency>("include", dep, dependencyConfiguration)
+    addProvider<MinimalExternalModuleDependency, ExternalModuleDependency>("implementation", dep, dependencyConfiguration)
 }
 
 afterEvaluate {
