@@ -9,8 +9,10 @@ import net.fabricmc.loom.api.fabricapi.FabricApiExtension
 import net.fabricmc.loom.task.RemapSourcesJarTask
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
 import net.fabricmc.loom.task.prod.ClientProductionRunTask
+import org.gradle.api.Action
 import org.gradle.api.provider.Provider
 import org.gradle.api.artifacts.ExternalModuleDependency
+import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.process.ExecSpec
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -238,9 +240,15 @@ fun DependencyHandler.includeImplementation(dep: Any) {
     implementation(dep)
 }
 
-fun DependencyHandler.includeImplementation(dep: String, dependencyConfiguration: ExternalModuleDependency.() -> Unit,): ExternalModuleDependency {
+fun DependencyHandler.includeImplementation(dep: String, dependencyConfiguration: ExternalModuleDependency.() -> Unit): ExternalModuleDependency {
     add("include", dep, dependencyConfiguration)
     return add("implementation", dep, dependencyConfiguration)
+}
+
+fun <T : Any> DependencyHandler.includeImplementation(dep: Provider<T>, dependencyConfiguration: ExternalModuleDependency.() -> Unit) {
+    val action = Action<ExternalModuleDependency> { dependencyConfiguration(it) }
+    addProvider("include", dep, action)
+    addProvider("implementation", dep, action)
 }
 
 afterEvaluate {
