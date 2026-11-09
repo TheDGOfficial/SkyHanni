@@ -10,6 +10,7 @@ import net.fabricmc.loom.task.RemapSourcesJarTask
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
 import net.fabricmc.loom.task.prod.ClientProductionRunTask
 import org.gradle.api.provider.Provider
+import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.process.ExecSpec
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -235,6 +236,11 @@ dependencies {
 fun DependencyHandler.includeImplementation(dep: Any) {
     include(dep)
     implementation(dep)
+}
+
+fun DependencyHandler.includeImplementation(dep: String, dependencyConfiguration: ExternalModuleDependency.() -> Unit,): ExternalModuleDependency {
+    add("include", dep, dependencyConfiguration)
+    return add("implementation", dep, dependencyConfiguration)
 }
 
 afterEvaluate {
