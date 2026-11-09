@@ -67,6 +67,8 @@ loom.apply {
         }
         removeIf { it.name == "server" }
     }
+
+    uncompressNestedJars = true
 }
 
 val shadowImpl = configurations.create("shadowImpl") {
