@@ -3,8 +3,6 @@ import at.skyhanni.sharedvariables.SHVersionInfo
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
 import jdk.internal.net.http.common.TimeSource.source
-import jdk.jfr.internal.JVM.exclude
-import jdk.jfr.internal.JVM.include
 import net.fabricmc.loom.api.fabricapi.FabricApiExtension
 import net.fabricmc.loom.task.RemapSourcesJarTask
 import net.fabricmc.loom.task.ValidateAccessWidenerTask
@@ -246,9 +244,8 @@ fun DependencyHandler.includeImplementation(dep: String, dependencyConfiguration
 }
 
 fun <T : Any> DependencyHandler.includeImplementation(dep: Provider<T>, dependencyConfiguration: ExternalModuleDependency.() -> Unit) {
-    val action = Action<ExternalModuleDependency> { dependencyConfiguration(it) }
-    addProvider("include", dep, action)
-    addProvider("implementation", dep, action)
+    addProvider("include", dep) { dependencyConfiguration() }
+    addProvider("implementation", dep) { dependencyConfiguration() }
 }
 
 afterEvaluate {
