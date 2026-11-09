@@ -164,7 +164,7 @@ dependencies {
     "productionRuntimeMods"(libs.devauth)
 
     val moulconfigVersion = target.minecraftVersion.moulconfigMinecraftVersionOverride ?: target.minecraftVersion.versionName
-    shadowImpl("org.notenoughupdates.moulconfig:modern-$moulconfigVersion:${libs.versions.moulconfig.get()}") {
+    includeImplementation("org.notenoughupdates.moulconfig:modern-$moulconfigVersion:${libs.versions.moulconfig.get()}") {
         exclude("org.jetbrains.kotlin")
         exclude("org.jetbrains.kotlinx")
     }
@@ -172,7 +172,7 @@ dependencies {
         "org.notenoughupdates.moulconfig:modern-$moulconfigVersion:${libs.versions.moulconfig.get()}"
     )
 
-    shadowImpl(libs.libautoupdate) {
+    includeImplementation(libs.libautoupdate) {
         exclude(module = "gson")
     }
     "minecraftTestClientRuntimeLibraries"(libs.libautoupdate)
@@ -199,11 +199,11 @@ dependencies {
     "minecraftTestClientRuntimeLibraries"(libs.basicMath)
 
     // getting clock offset
-    shadowImpl(libs.commons.net)
+    includeImplementation(libs.commons.net)
     "minecraftTestClientRuntimeLibraries"(libs.commons.net)
 
     // Calculator
-    shadowImpl(libs.keval) {
+    includeImplementation(libs.keval) {
         exclude(group = "org.jetbrains.kotlin")
     }
     "minecraftTestClientRuntimeLibraries"(libs.keval)
@@ -212,7 +212,7 @@ dependencies {
     detektPlugins(project(":detekt"))
     detektPlugins(libs.detektrules.ktlint)
 
-    shadowImpl(libs.httpclient)
+    includeImplementation(libs.httpclient)
     "minecraftTestClientRuntimeLibraries"(libs.httpclient)
 
     target.renderChestVersion?.let {
